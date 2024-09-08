@@ -36,7 +36,7 @@ export class GrantOpportunityResolver {
     @Args('status', { type: () => DiverseStatus }) status: DiverseStatus,
     @Args('page') page: number = 1,
     @Args('limit') limit: number = 10,
-  ) {
+  ): Promise<PaginatedGrantOpportunities> {
     try {
       const statusMap: Map<DiverseStatus, Status[]> = new Map([
         [DiverseStatus.APPLIED, [Status.ACCEPTED, Status.REJECTED]],
