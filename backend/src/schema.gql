@@ -1,0 +1,56 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""grantOpportunity"""
+type GrantOpportunity {
+  id: String!
+  title: String!
+  location: String!
+  avgAmount: Float!
+  deadLineDate: String!
+  companyName: String!
+  matchDate: String!
+  description: String!
+  status: Status!
+  areaOfFunding: [AreaOfFunding!]!
+  comment: String
+}
+
+enum Status {
+  NEW
+  ACCEPTED
+  REJECTED
+}
+
+enum AreaOfFunding {
+  PUBLIC_HEALTH_WOMEN
+  CULTURE_FOOD
+  MEDICAL_ASSISGTANCE
+  VETERANS_ISSUES
+  ENVIROMENT_ART
+  RELIGIOUS_AND_SPIRITUAL_ENDEAVORS
+  PUBLIC_HEALTH_MEN
+  PUBLIC_HEALTH_CHILD
+  PUBLIC_HEALTH_ADULT
+}
+
+type PaginatedGrantOpportunities {
+  items: [GrantOpportunity!]!
+  totalPages: Int!
+}
+
+type Query {
+  getNewOpportunities: [GrantOpportunity!]!
+  getAllOpportunities: [GrantOpportunity!]!
+  grants(status: DiverseStatus!, page: Float!, limit: Float!): PaginatedGrantOpportunities!
+}
+
+enum DiverseStatus {
+  NEW
+  APPLIED
+}
+
+type Mutation {
+  updateOpportunityStatus(id: String!, status: Status!, comment: String): GrantOpportunity!
+}
