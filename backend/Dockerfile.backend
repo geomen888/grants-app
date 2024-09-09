@@ -1,34 +1,31 @@
-# Stage 1: Build the NestJS app
+# Use Node.js image for the backend service
 FROM node:20.17-slim AS build-backend
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to install dependencies
+# Copy package.json and pnpm-lock.yaml
 COPY package*.json ./
+COPY pnpm-lock.yaml ./
 
-# Install dependencies
-RUN pnpm install
+# Install npm and pnpm globally
+RUN npm i -g npm@latest && \
+    npm install -g pnpm && \
+    pnpm setup && \
+    export PNPM_HOME="/root/.local/share/pnpm" && \
+    export PATH="$PNPM_HOME:$PATH" && \
+    pnpm bin -g&&\
+    pnpm install -g typeorm &&\
+    pnpm install
 
-# Copy the rest of the application source code
+# Copy the rest of the backend source code
 COPY . .
 
-# Build the application
+# Build the backend app (NestJS)
 RUN pnpm run build
 
-# Stage 2: Create the production image
-FROM node:20.17-slim
-
-WORKDIR /usr/src/app
-
-# Copy build and node_modules from the previous stage
-COPY --from=build-backend /usr/src/app ./
-
-# Expose the application port
+# Expose backend port
 EXPOSE 3000
 
-# Install TypeORM globally so migrations can be run inside the container
-RUN pnpm install -g typeorm
-
-# Command to run the application
-CMD ["npm", "run", "start:prod"]
+# Start the backend application
+CMD ["pnpm", "run", "start:prod"]
