@@ -10,6 +10,7 @@ COPY pnpm-lock.yaml ./
 # Install pnpm globally and dependencies
 RUN npm i -g npm@latest && \
     npm install -g pnpm && \
+    pnpm bin -g &&\
     pnpm install
 
 # Copy the rest of the source code, excluding node_modules using .dockerignore

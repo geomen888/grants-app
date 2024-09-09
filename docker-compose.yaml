@@ -72,7 +72,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile.backend-test
     container_name: grants-backend-test
-    command: ["npm", "run", "test"]
+    command: ["pnpm", "run", "test"]
     environment:
       DATABASE_PORT: 5432
       POSTGRES_USER: postgres

@@ -14,7 +14,7 @@ RUN npm i -g npm@latest && \
     pnpm setup && \
     export PNPM_HOME="/root/.local/share/pnpm" && \
     export PATH="$PNPM_HOME:$PATH" && \
-    pnpm bin -g&&\
+    pnpm bin -g&& \
     pnpm install -g typeorm &&\
     pnpm install
 
