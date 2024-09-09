@@ -53,7 +53,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile.backend-seed
     container_name: grants-backend-seed
-    command: ["node", "dist/postgres/seeder/seeder.js", "--limit", "50"]
+    command: ["node", "dist/postgres/seeds/seeder.js", "--limit", "50"]
     environment:
       DATABASE_PORT: 5432
       POSTGRES_USER: postgres

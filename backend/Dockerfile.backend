@@ -1,31 +1,26 @@
-# Use Node.js image for the backend service
-FROM node:20.17-slim AS build-backend
+# Use Node.js 20 slim image
+FROM node:20
+
+# Install pnpm using corepack
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy package.json and pnpm-lock.yaml
-COPY package*.json ./
-COPY pnpm-lock.yaml ./
+# Copy package.json and pnpm-lock.yaml before installing dependencies
+COPY package.json pnpm-lock.yaml ./
 
-# Install npm and pnpm globally
-RUN npm i -g npm@latest && \
-    npm install -g pnpm && \
-    pnpm setup && \
-    export PNPM_HOME="/root/.local/share/pnpm" && \
-    export PATH="$PNPM_HOME:$PATH" && \
-    pnpm bin -g&& \
-    pnpm install -g typeorm &&\
-    pnpm install
+# Install dependencies using pnpm
+RUN pnpm install --frozen-lockfile
 
-# Copy the rest of the backend source code
+# Copy the rest of the application source code
 COPY . .
 
-# Build the backend app (NestJS)
+# Build the application (NestJS)
 RUN pnpm run build
 
-# Expose backend port
+# Expose the application port
 EXPOSE 3000
 
-# Start the backend application
-CMD ["pnpm", "run", "start:prod"]
+# Start the application in production mode
+CMD ["pnpm", "start:prod"]

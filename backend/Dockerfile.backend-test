@@ -1,29 +1,32 @@
-# Use Node.js image as base for backend tests
-FROM node:20.17-slim
+# Use Node.js 20 slim image
+FROM node:20-slim
+
+# Install pnpm using corepack
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json
-COPY package*.json ./
+# Copy package.json and pnpm-lock.yaml before installing dependencies
+COPY package.json pnpm-lock.yaml ./
 
-RUN npm i -g npm@latest; \
- # Install pnpm
- npm install -g pnpm; \
- pnpm --version; \
- pnpm setup; \
- mkdir -p /usr/local/share/pnpm &&\
- export PNPM_HOME="/usr/local/share/pnpm" &&\
- export PATH="$PNPM_HOME:$PATH"; \
- pnpm bin -g&&\
-# Install dependencies
- pnpm install
+# Install dependencies (including devDependencies)
+RUN pnpm install --frozen-lockfile
 
-# Copy the entire backend source code
+# Copy the rest of the application code
 COPY . .
 
-# Build the NestJS app
+# Ensure Jest is installed as a dev dependency
+RUN pnpm add --save-dev jest
+
+# Build the application
 RUN pnpm run build
 
-# Run the tests
-CMD ["pnpm", "run", "test"]
+# Check that the necessary files exist in node_modules and dist
+RUN ls -al /usr/src/app/node_modules && ls -al /usr/src/app/dist
+
+# Verify that main.js is present in dist (otherwise, exit with error)
+RUN if [ ! -f "dist/main.js" ]; then echo "Error: dist/main.js file is missing"; exit 1; fi
+
+# Run the tests using Jest
+CMD ["pnpm", "test"]
