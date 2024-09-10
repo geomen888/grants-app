@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Logger } from '@nestjs/common';
+
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 
@@ -46,6 +48,7 @@ describe('GrantOpportunityResolver', () => {
           provide: getRepositoryToken(GrantOpportunity),
           useValue: mockGrantOpportunityRepo(),
         },
+        Logger,
       ],
     }).compile();
 
