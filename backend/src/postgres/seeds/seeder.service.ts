@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -10,6 +10,7 @@ export class SeederService {
   constructor(
     @InjectRepository(GrantOpportunity)
     private readonly grantOpportunityRepo: Repository<GrantOpportunity>,
+    private logger: Logger,
   ) {}
 
   async seed(limit: number): Promise<void> {
@@ -19,13 +20,13 @@ export class SeederService {
         console.log('Grants already exist, skipping seeding');
         return;
       }
- 
+
       const mockData = data.slice(0, limit);
-  
+
       await this.grantOpportunityRepo.save(mockData);
       console.log('Database seeding completed successfully.');
-    } catch(e) {
-
+    } catch (e) {
+      this.logger.error(e);
     }
   }
 }

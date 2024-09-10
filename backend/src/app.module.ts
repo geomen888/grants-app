@@ -1,5 +1,4 @@
-
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -22,6 +21,6 @@ import { GrantOpportunity } from './postgres/pg-models/grant-opportunity.entity'
     TypeOrmModule.forFeature([GrantOpportunity]),
     GrantOpportunityModule,
   ],
-  providers: [SeederService],
+  providers: [SeederService, Logger],
 })
 export class AppModule {}

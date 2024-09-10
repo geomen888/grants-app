@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -19,9 +18,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         migrations: [__dirname + '/migrations/*{.ts,.js}'],
         entities: [__dirname + '/pg-models/*.entity{.ts,.js}'],
         synchronize: true, // Temporarily enable this for development
-        logging: true, 
+        logging: true,
         autoLoadEntities: true,
-        // synchronize: false // Be cautious about using synchronize in production
       }),
       inject: [ConfigService],
     }),

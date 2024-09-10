@@ -1,8 +1,9 @@
+import { Logger } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-import { InjectRepository, } from '@nestjs/typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 
-import { PaginatedGrantOpportunities } from './graphql/PaginatedGrantOpportunities'
+import { PaginatedGrantOpportunities } from './graphql/PaginatedGrantOpportunities';
 import { GrantOpportunity } from '../postgres/pg-models/grant-opportunity.entity';
 import { Status, DiverseStatus } from '../common/enums';
 
@@ -11,13 +12,15 @@ export class GrantOpportunityResolver {
   constructor(
     @InjectRepository(GrantOpportunity)
     private grantOpportunityRepo: Repository<GrantOpportunity>,
-  ) { }
+    private logger: Logger,
+  ) {}
 
   @Query(() => [GrantOpportunity])
   async getNewOpportunities(): Promise<GrantOpportunity[]> {
     try {
       return this.grantOpportunityRepo.find({ where: { status: Status.NEW } });
     } catch (e) {
+      this.logger.error(e);
       throw new Error('Failed to get grants with status NEW');
     }
   }
@@ -27,6 +30,9 @@ export class GrantOpportunityResolver {
     try {
       return this.grantOpportunityRepo.find();
     } catch (e) {
+      this.logger.error(e);
+      this.logger.error(e);
+
       throw new Error('Failed to to get all grants');
     }
   }
@@ -40,7 +46,7 @@ export class GrantOpportunityResolver {
     try {
       const statusMap: Map<DiverseStatus, Status[]> = new Map([
         [DiverseStatus.APPLIED, [Status.ACCEPTED, Status.REJECTED]],
-        [DiverseStatus.NEW, [Status.NEW]]
+        [DiverseStatus.NEW, [Status.NEW]],
       ]);
 
       const statuses = statusMap.get(status) || [Status.NEW];
@@ -56,6 +62,7 @@ export class GrantOpportunityResolver {
 
       return { items, totalPages };
     } catch (e) {
+      this.logger.error(e);
       throw new Error('Failed to to get paginated grants');
     }
   }
@@ -80,6 +87,7 @@ export class GrantOpportunityResolver {
 
       return this.grantOpportunityRepo.save(opportunity);
     } catch (e) {
+      this.logger.error(e);
       throw new Error('Failed to update status');
     }
   }

@@ -15,22 +15,23 @@ const mockGrantOpportunityRepo = () => ({
 });
 
 const mockGrant = {
-  "title": "Magmina Foundation Grant",
-  "comment": null,
-  "location": "Hessville, North Dakota",
-  "avgAmount": 65000,
-  "matchDate": "2025-01-20",
-  "companyName": "Magmina Foundation",
-  "description": "Mollit quis aliqua officia commodo laborum velit dolore aliqua.",
-  "deadLineDate": "2024-12-02",
-  "areaOfFunding": [
+  title: 'Magmina Foundation Grant',
+  comment: null,
+  location: 'Hessville, North Dakota',
+  avgAmount: 65000,
+  matchDate: '2025-01-20',
+  companyName: 'Magmina Foundation',
+  description:
+    'Mollit quis aliqua officia commodo laborum velit dolore aliqua.',
+  deadLineDate: '2024-12-02',
+  areaOfFunding: [
     AreaOfFunding.RELIGIOUS_AND_SPIRITUAL_ENDEAVORS,
     AreaOfFunding.VETERANS_ISSUES,
     AreaOfFunding.PUBLIC_HEALTH_WOMEN,
     AreaOfFunding.ENVIROMENT_ART,
     AreaOfFunding.MEDICAL_ASSISGTANCE,
-    AreaOfFunding.CULTURE_FOOD
-  ]
+    AreaOfFunding.CULTURE_FOOD,
+  ],
 } as GrantOpportunity;
 
 describe('GrantOpportunityResolver', () => {
@@ -54,31 +55,41 @@ describe('GrantOpportunityResolver', () => {
 
   describe('getNewOpportunities', () => {
     it('should return an array of new grant opportunities', async () => {
-      const mockGrants = [{
-        ...mockGrant,
-        status: Status.NEW
-      }];
+      const mockGrants = [
+        {
+          ...mockGrant,
+          status: Status.NEW,
+        },
+      ];
 
       grantOpportunityRepo.find.mockResolvedValue(mockGrants);
 
       const result = await resolver.getNewOpportunities();
       expect(result).toEqual(mockGrants);
-      expect(grantOpportunityRepo.find).toHaveBeenCalledWith({ where: { status: Status.NEW } });
+      expect(grantOpportunityRepo.find).toHaveBeenCalledWith({
+        where: { status: Status.NEW },
+      });
     });
 
     it('should throw an error if there is a failure', async () => {
-      grantOpportunityRepo.find.mockRejectedValue(new Error('Failed to get grants with status NEW'));
+      grantOpportunityRepo.find.mockRejectedValue(
+        new Error('Failed to get grants with status NEW'),
+      );
 
-      await expect(resolver.getNewOpportunities()).rejects.toThrow('Failed to get grants with status NEW');
+      await expect(resolver.getNewOpportunities()).rejects.toThrow(
+        'Failed to get grants with status NEW',
+      );
     });
   });
 
   describe('getAllOpportunities', () => {
     it('should return all grant opportunities', async () => {
-      const mockGrants = [{
-        ...mockGrant,
-        status: Status.NEW
-      }];      
+      const mockGrants = [
+        {
+          ...mockGrant,
+          status: Status.NEW,
+        },
+      ];
       grantOpportunityRepo.find.mockResolvedValue(mockGrants);
 
       const result = await resolver.getAllOpportunities();
@@ -87,23 +98,36 @@ describe('GrantOpportunityResolver', () => {
     });
 
     it('should throw an error if there is a failure', async () => {
-      grantOpportunityRepo.find.mockRejectedValue(new Error('Failed to get all grants'));
+      grantOpportunityRepo.find.mockRejectedValue(
+        new Error('Failed to get all grants'),
+      );
 
-      await expect(resolver.getAllOpportunities()).rejects.toThrow('Failed to get all grants');
+      await expect(resolver.getAllOpportunities()).rejects.toThrow(
+        'Failed to get all grants',
+      );
     });
   });
 
   describe('grants', () => {
     it('should return paginated grant opportunities based on status', async () => {
-      const mockGrants = [{
-        ...mockGrant,
-        status: Status.NEW
-      }];      
+      const mockGrants = [
+        {
+          ...mockGrant,
+          status: Status.NEW,
+        },
+      ];
       const totalItems = 1;
-      grantOpportunityRepo.findAndCount.mockResolvedValue([mockGrants, totalItems]);
+      grantOpportunityRepo.findAndCount.mockResolvedValue([
+        mockGrants,
+        totalItems,
+      ]);
 
       // Execute the resolver function
-      const result: PaginatedGrantOpportunities = await resolver.grants(DiverseStatus.NEW, 1, 10);
+      const result: PaginatedGrantOpportunities = await resolver.grants(
+        DiverseStatus.NEW,
+        1,
+        10,
+      );
 
       // Verify the structure of the returned PaginatedGrantOpportunities
       expect(result).toEqual({
@@ -119,15 +143,18 @@ describe('GrantOpportunityResolver', () => {
     });
 
     it('should throw an error if there is a failure', async () => {
-      grantOpportunityRepo.findAndCount.mockRejectedValue(new Error('Failed to get paginated grants'));
+      grantOpportunityRepo.findAndCount.mockRejectedValue(
+        new Error('Failed to get paginated grants'),
+      );
 
-      await expect(resolver.grants(DiverseStatus.NEW, 1, 10)).rejects.toThrow('Failed to to get paginated grants');
+      await expect(resolver.grants(DiverseStatus.NEW, 1, 10)).rejects.toThrow(
+        'Failed to to get paginated grants',
+      );
     });
   });
 
   describe('updateOpportunityStatus', () => {
     it('should update the status of a grant opportunity', async () => {
-
       grantOpportunityRepo.findOneBy.mockResolvedValue(mockGrant);
       grantOpportunityRepo.save.mockResolvedValue({
         ...mockGrant,
@@ -135,7 +162,11 @@ describe('GrantOpportunityResolver', () => {
         comment: 'Great opportunity!',
       });
 
-      const result = await resolver.updateOpportunityStatus('1', Status.ACCEPTED, 'Great opportunity!');
+      const result = await resolver.updateOpportunityStatus(
+        '1',
+        Status.ACCEPTED,
+        'Great opportunity!',
+      );
       expect(result).toEqual({
         ...mockGrant,
         status: Status.ACCEPTED,
@@ -151,18 +182,28 @@ describe('GrantOpportunityResolver', () => {
     it('should throw an error if the grant opportunity is not found', async () => {
       grantOpportunityRepo.findOneBy.mockResolvedValue(null);
 
-      await expect(resolver.updateOpportunityStatus('1', Status.ACCEPTED, 'Great opportunity!')).rejects.toThrow(
-        'Failed to update status',
-      );
+      await expect(
+        resolver.updateOpportunityStatus(
+          '1',
+          Status.ACCEPTED,
+          'Great opportunity!',
+        ),
+      ).rejects.toThrow('Failed to update status');
     });
 
     it('should throw an error if there is a failure while updating', async () => {
       grantOpportunityRepo.findOneBy.mockResolvedValue(mockGrant);
-      grantOpportunityRepo.save.mockRejectedValue(new Error('Failed to update status'));
-
-      await expect(resolver.updateOpportunityStatus('1', Status.ACCEPTED, 'Great opportunity!')).rejects.toThrow(
-        'Failed to update status',
+      grantOpportunityRepo.save.mockRejectedValue(
+        new Error('Failed to update status'),
       );
+
+      await expect(
+        resolver.updateOpportunityStatus(
+          '1',
+          Status.ACCEPTED,
+          'Great opportunity!',
+        ),
+      ).rejects.toThrow('Failed to update status');
     });
   });
 });

@@ -5,7 +5,6 @@ import * as commandLineUsage from 'command-line-usage';
 import { AppModule } from '../../app.module';
 import { SeederService } from './seeder.service';
 
-
 const optionDefinitions = [
   { name: 'limit', alias: 'l', type: Number, defaultValue: 10 },
   { name: 'help', alias: 'h', type: Boolean },

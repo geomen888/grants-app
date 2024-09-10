@@ -1,9 +1,9 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum Status {
-   NEW = 'NEW',
-   ACCEPTED = 'ACCEPTED',
-   REJECTED = 'REJECTED'
+  NEW = 'NEW',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
 }
 
 export enum AreaOfFunding {

@@ -16,17 +16,8 @@ RUN pnpm install --frozen-lockfile
 # Copy the rest of the application code
 COPY . .
 
-# Ensure Jest is installed as a dev dependency
-RUN pnpm add --save-dev jest
-
 # Build the application
 RUN pnpm run build
-
-# Check that the necessary files exist in node_modules and dist
-RUN ls -al /usr/src/app/node_modules && ls -al /usr/src/app/dist
-
-# Verify that main.js is present in dist (otherwise, exit with error)
-RUN if [ ! -f "dist/main.js" ]; then echo "Error: dist/main.js file is missing"; exit 1; fi
 
 # Run the tests using Jest
 CMD ["pnpm", "test"]

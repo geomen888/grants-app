@@ -1,5 +1,5 @@
 # Use Node.js 20 slim image
-FROM node:20
+FROM node:20-slim
 
 # Install pnpm using corepack
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -13,22 +13,11 @@ COPY package.json pnpm-lock.yaml ./
 # Install dependencies using pnpm
 RUN pnpm install --frozen-lockfile
 
-# List the contents of the current directory to inspect the folder structure
-RUN ls -al /usr/src/app
-
 # Copy the rest of the application code
 COPY . .
 
-# List the contents of the current directory again after copying the code
-
 # Build the application (includes the seeder)
 RUN pnpm run build
-
-# List the contents of the dist folder to ensure it's created and populated
-RUN ls -al /usr/src/app/dist/postgres/seeds
-
-# Ensure the dist folder exists and the seeder file is present
-RUN if [ ! -f "dist/postgres/seeds/seeder.js" ]; then echo "Error: seeder.js file missing"; exit 1; fi
 
 # Command to run the seed script
 CMD ["node", "dist/postgres/seeds/seeder.js", "--limit", "50"]

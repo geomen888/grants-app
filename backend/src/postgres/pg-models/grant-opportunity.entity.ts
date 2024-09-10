@@ -3,7 +3,7 @@ import { ObjectType, Field } from '@nestjs/graphql';
 
 import { Status, AreaOfFunding } from '../../common/enums';
 
-@ObjectType({ description: 'grantOpportunity'})
+@ObjectType({ description: 'grantOpportunity' })
 @Entity()
 export class GrantOpportunity {
   @Field(() => String)
@@ -43,17 +43,17 @@ export class GrantOpportunity {
     type: 'enum',
     enum: Status,
     default: Status.NEW,
-   })
-   status: Status;
+  })
+  status: Status;
 
-   @Field(() => [AreaOfFunding])
-   @Column({
-     type: 'enum',
-     array: true,
-     enum: AreaOfFunding,
-     default: [],
-    })
-    areaOfFunding: AreaOfFunding[]; 
+  @Field(() => [AreaOfFunding])
+  @Column({
+    type: 'enum',
+    array: true,
+    enum: AreaOfFunding,
+    default: [],
+  })
+  areaOfFunding: AreaOfFunding[];
 
   @Field({ nullable: true })
   @Column({ nullable: true })
