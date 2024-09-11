@@ -11,6 +11,7 @@ interface CardFrameProps {
   onLike: (id: string, feedback: string) => void;
   onDislike: (id: string, feedback: string) => void;
   pageCount: number;
+  currentPage: number;
   onPageChange: (page: number) => void;
 }
 
@@ -21,9 +22,7 @@ const GridContainer = styled.div`
   padding: 2rem;
 `;
 
-
-
-const CardFrame: React.FC<CardFrameProps> = ({ grants = [], onLike, onDislike, pageCount, onPageChange }) => {
+const CardFrame: React.FC<CardFrameProps> = ({ grants = [], onLike, onDislike, pageCount, currentPage, onPageChange }) => {
   return (
     <>
       {grants && grants.length ? <GridContainer>
@@ -34,7 +33,10 @@ const CardFrame: React.FC<CardFrameProps> = ({ grants = [], onLike, onDislike, p
         }
       </GridContainer>
         : <ListIsEmpty />}
-      <Pagination pageCount={pageCount} onPageChange={onPageChange} />
+      <Pagination 
+      pageCount={pageCount}
+      currentPage={currentPage}
+      onPageChange={onPageChange} />
     </>
   );
 };

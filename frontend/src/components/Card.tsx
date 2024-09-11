@@ -17,10 +17,8 @@ const CardContainer = styled.div`
   padding: 1.5rem;
   position: relative;
   background-color: white;
-  width: 20rem;
-
-  margin: 10px;
-
+  width: 17rem;
+  margin: 1rem;
   &:hover {
     border-color: #0066ff;
   }

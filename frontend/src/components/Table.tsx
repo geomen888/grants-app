@@ -9,6 +9,7 @@ import { dateFormatter, amountFormatter } from '../utils';
 interface TableProps {
   grants: Grant[];
   pageCount: number;
+  currentPage: number;
   onPageChange: (page: number) => void;
 }
 
@@ -31,7 +32,7 @@ const TableContainer = styled.table`
   }
 `;
 
-const Table: React.FC<TableProps> = ({ grants, pageCount, onPageChange }) => {
+const Table: React.FC<TableProps> = ({ grants, pageCount, currentPage, onPageChange }) => {
   return (
     <>
       <TableContainer>
@@ -65,7 +66,10 @@ const Table: React.FC<TableProps> = ({ grants, pageCount, onPageChange }) => {
           }
         </tbody>
       </TableContainer>
-      <Pagination pageCount={pageCount} onPageChange={onPageChange} />
+      <Pagination 
+      pageCount={pageCount}
+      currentPage={currentPage}
+      onPageChange={onPageChange} />
     </>
   );
 };

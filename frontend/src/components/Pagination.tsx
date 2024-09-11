@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 interface PaginationProps {
   pageCount: number;
+  currentPage: number;
   onPageChange: (selectedPage: number) => void;
 }
 
@@ -31,11 +32,12 @@ const PaginationWrapper = styled.div`
   }
 `;
 
-const Pagination: React.FC<PaginationProps> = ({ pageCount, onPageChange }) => {
+const Pagination: React.FC<PaginationProps> = ({ pageCount, currentPage, onPageChange }) => {
   return (
     <PaginationWrapper>
       <ReactPaginate
         pageCount={pageCount}
+        forcePage={currentPage - 1}
         onPageChange={(data) => onPageChange(data.selected + 1)}
         containerClassName={'pagination'}
         activeClassName={'active'}

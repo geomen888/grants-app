@@ -1,23 +1,15 @@
-# Use Node.js 20 slim image
 FROM node:20-slim
 
-# Install pnpm using corepack
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy package.json and pnpm-lock.yaml before installing dependencies
 COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies using pnpm
 RUN pnpm install --frozen-lockfile
 
-# Copy the rest of the application code
 COPY . .
 
-# Build the application (includes the seeder)
 RUN pnpm run build
 
-# Command to run the seed script
 CMD ["node", "dist/postgres/seeds/seeder.js", "--limit", "50"]
